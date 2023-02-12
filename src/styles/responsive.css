@@ -1,0 +1,85 @@
+@media only screen and (max-width: 1600px) {
+  .st-card {
+    width: 175px !important;
+    height: 266px;
+    padding-left: 26px;
+  }
+
+  .st-card h1 {
+    font-size: 30px;
+  }
+
+  .top-bar .logo {
+    font-size: 25px !important;
+  }
+}
+
+@media only screen and (max-width: 1300px) {
+  .analytic {
+    display: block !important;
+  }
+
+  .satisfaction {
+    height: 500px !important;
+  }
+
+  .top-bar .logo {
+    font-size: 30px !important;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .ststistics {
+    grid-template-columns: auto auto auto !important;
+  }
+
+  .main-right {
+    display: block !important;
+  }
+
+  .right-side {
+    margin-left: 0 !important;
+    padding: 0px 0px;
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  .top-bar .logo {
+    font-size: 25px !important;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .ststistics {
+    grid-template-columns: auto auto auto !important;
+  }
+  .top-bar .search-bar {
+    display: none;
+  }
+  .glass-only {
+    display: block !important;
+  }
+  .currancycard {
+    width: auto !important;
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  .ststistics {
+    grid-template-columns: auto auto !important;
+  }
+  .top-bar .logo {
+    font-size: 18px !important;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .ststistics {
+    display: block !important;
+  }
+
+  .st-card {
+    width: 100% !important;
+    height: 240px !important;
+  }
+}
