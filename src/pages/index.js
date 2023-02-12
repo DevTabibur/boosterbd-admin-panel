@@ -9,6 +9,7 @@ import Analytic from "@/Components/Shared/Homepage/Analytic";
 import Satisfaction from "@/Components/Shared/Homepage/Satisfaction";
 import CustomarReviwe from "@/Components/Shared/Homepage/CustomarReviwe";
 import { useState } from "react";
+// import "tw-elements";
 
 export default function Home({}) {
   const [show, setShow] = useState(false);
