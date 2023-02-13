@@ -1,5 +1,6 @@
 import Sidebar from "@/Components/Sidebar/Sidebar";
 import Topbar from "@/Components/Topbar";
+import { addAccountReqDB } from "Database/addAccountReqDB";
 import Head from "next/head";
 import { useState } from "react";
 
@@ -34,7 +35,7 @@ const AddAccount = () => {
               show={show}
               setShow={setShow}
             />
-            <section className="main-right ml-[38px] ">
+            <div className="grid md:grid-cols-1 my-0 mx-4">
               <div className="md:flex block  items-center justify-between pr-10 mt-5">
                 <button className="bg-[#DBDEE4] md:text-[16px] text-[12px] font-bold border border-[#7A8489] rounded-xl px-[20px] py-[12px]">
                   Crete Ad Account
@@ -57,35 +58,38 @@ const AddAccount = () => {
                   </svg>
                 </button>
               </div>
-              <div className="container">
-                <table className="w-full flex flex-row flex-no-wrap sm:bg-white rounded-lg overflow-hidden mt-10">
+
+              <div className="overflow-x-auto">
+                <table className="table-auto w-full  mt-10 font-normal">
                   <thead className="text-white">
-                    <tr className="text-black flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0">
+                    <tr className="text-black flex md:flex-row flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0">
                       <th className="p-3 text-left text-[#717D82]">Date</th>
                       <th className="p-3 text-left text-[#717D82]">
                         Add Account Name
                       </th>
                       <th className="p-3 text-left text-[#717D82]">
+                        Add Account Number
+                      </th>
+                      <th className="p-3 text-left text-[#717D82]">
                         Page Name
                       </th>
                       <th className="p-3 text-left text-[#717D82]">Page ID</th>
-                      <th className="p-3 text-left">Country</th>
+                      <th className="p-3 text-left text-[#717D82]">Country</th>
 
-                      <th className="p-3 text-left">Action</th>
+                      <th className="p-3 text-left text-[#717D82]">Action</th>
                     </tr>
                   </thead>
-                  <tbody className="flex-1 sm:flex-none">
-                    <TableRow />
-                    <TableRow />
-                    <TableRow />
-                    <TableRow />
-                    <TableRow />
-                    <TableRow />
-                    <TableRow />
-                  </tbody>
+                  {/* table ad account requests dynamic data */}
+                  {addAccountReqDB.map((ad, i) => {
+                    return (
+                      <tbody key={i}>
+                        <TableRow ad={ad} />
+                      </tbody>
+                    );
+                  })}
                 </table>
               </div>
-            </section>
+            </div>
           </div>
         </section>
       </main>
@@ -95,27 +99,34 @@ const AddAccount = () => {
 
 export default AddAccount;
 
-const TableRow = ({ data }) => {
+const TableRow = ({ ad }) => {
+  const { date, adAccountName, adAccountNumber, pageName, pageID, country } =
+    ad;
   return (
-    <tr className="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0 text-[14px]">
-      <td className="text-[#464F53]   font-normal   p-3">10 Feb 2023</td>
-      <td className="text-[#464F53]   font-normal   p-3 truncate">
-        Fdf434343frGd
-      </td>
-      <td className="text-[#464F53]   font-normal   p-3 ">DFj83483JDF</td>
-      <td className="text-[#464F53]   font-normal   p-3 ">Modarator</td>
-      <td className="text-[#464F53]   font-normal   p-3 ">Bangladesh</td>
-      <td className=" font-normal  p-3 text-red-400 hover:text-red-600 hover:font-medium cursor-pointer">
-        <button className="bg-[#47C363] px-2 py-1 rounded-md text-[12px] text-white">
-          Active
-        </button>
-        <button className="bg-[#C34747] mx-2 px-2 py-1 rounded-md text-[12px] text-white">
-          Rejected
-        </button>
-        <button className="bg-[#8756EF] px-2 py-1 rounded-md text-[12px] text-white">
-          Pending
-        </button>
-      </td>
-    </tr>
+    <>
+      <tr className="flex md:flex-row flex-no wrap sm:table-row mb-2 sm:mb-0 text-[14px]">
+        <td className="text-[#464F53]   font-normal   p-3">{date}</td>
+        <td className="text-[#464F53]   font-normal   p-3 truncate">
+          {adAccountName}
+        </td>
+        <td className="text-[#464F53]   font-normal   p-3 ">
+          {adAccountNumber}
+        </td>
+        <td className="text-[#464F53]   font-normal   p-3 ">{pageName}</td>
+        <td className="text-[#464F53]   font-normal   p-3 ">{pageID}</td>
+        <td className="text-[#464F53]   font-normal   p-3 ">{country}</td>
+        <td className=" font-normal  p-3 text-red-400 hover:text-red-600 hover:font-medium cursor-pointer">
+          <button className="bg-[#47C363] px-2 py-1 sm:my-1 rounded-md text-[12px] text-white">
+            Active
+          </button>
+          <button className="bg-[#C34747] mx-2 px-2 py-1 sm:my-1 rounded-md text-[12px] text-white">
+            Rejected
+          </button>
+          <button className="bg-[#8756EF] px-2 py-1 sm:my-1 rounded-md text-[12px] text-white">
+            Pending
+          </button>
+        </td>
+      </tr>
+    </>
   );
 };
