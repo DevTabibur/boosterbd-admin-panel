@@ -1,11 +1,20 @@
 import Sidebar from "@/Components/Sidebar/Sidebar";
 import Topbar from "@/Components/Topbar";
+import { transactionData } from "Database/transactions-data";
 import Head from "next/head";
 import { useState } from "react";
 
 const index = () => {
   const [show, setShow] = useState(false);
-
+  const approveOrder = (id) => {
+    alert(id);
+  };
+  const cancelOrder = (id) => {
+    alert(id);
+  };
+  const completedOrder = (id) => {
+    alert(id);
+  };
   return (
     <>
       <Head>
@@ -51,9 +60,20 @@ const index = () => {
                       <th className="p-3 text-left text-[#717D82]">Action</th>
                     </tr>
                   </thead>
-                  <tbody className="">
-                    {/* <TableRow /> */}
-                  </tbody>
+
+                  {/* dynamic data for table body */}
+                  {transactionData.map((data, i) => {
+                    return (
+                      <tbody key={i} className="">
+                        <TableRow
+                          data={data}
+                          approveOrder={approveOrder}
+                          cancelOrder={cancelOrder}
+                          completedOrder={completedOrder}
+                        />
+                      </tbody>
+                    );
+                  })}
                 </table>
               </div>
             </div>
@@ -66,31 +86,54 @@ const index = () => {
 
 export default index;
 
-const TableRow = ({ data }) => {
+const TableRow = ({ data, approveOrder, cancelOrder, completedOrder }) => {
+  const {
+    orderTime,
+    transactionID,
+    description,
+    paymentMethod,
+    remark,
+    amount,
+    charge,
+  } = data;
   return (
-    <tr className="flex md:flex-row flex-no-wrap sm:table-row mb-2 sm:mb-0">
-      <td className="text-[#464F53] font-normal  p-3">27-Jan-2023</td>
-      <td className="text-[#464F53] font-normal   p-3 truncate">PDF343gfmf</td>
-      <td className=" text-[#464F53] font-normal  p-3 ">Pay by Bkash</td>
-      <td className="   p-3 text-green-500 font-bold">
-        <button className="bg-black px-2 py-1 rounded-md text-[12px] text-white">
-          Order Placed
-        </button>
-      </td>
-      <td className=" p-3 text-[#FF6A6A]">-0 USD</td>
-      <td className="text-[#464F53] font-normal p-3 ">10 USD</td>
+    <>
+      <tr className="flex md:flex-row flex-no-wrap sm:table-row mb-2 sm:mb-0">
+        <td className="text-[#464F53] font-normal  p-3">{orderTime}</td>
+        <td className="text-[#464F53] font-normal   p-3 truncate">
+          {transactionID}
+        </td>
+        <td className=" text-[#464F53] font-normal  p-3 ">{description}</td>
+        <td className=" text-[#464F53] font-normal  p-3 ">{paymentMethod}</td>
+        <td className="   p-3 text-green-500 font-bold">
+          <button className="bg-black px-2 py-1 rounded-md text-[12px] text-white">
+            {remark}
+          </button>
+        </td>
+        <td className=" p-3 text-[#FF6A6A]">{amount}</td>
+        <td className="text-[#464F53] font-normal p-3 ">{charge}</td>
 
-      <td className="   p-3 text-red-400 hover:text-red-600 hover:font-medium cursor-pointer flex items-center">
-        <button className="bg-[#7A8489] px-2 py-1 rounded-md text-[12px] text-white">
-          Approve
-        </button>
-        <button className="bg-[#C34747] mx-2 px-2 py-1 rounded-md text-[12px] text-white">
-          Cancel
-        </button>
-        <button className="bg-[#47C363] px-2 py-1 rounded-md text-[12px] text-white">
-          Completed
-        </button>
-      </td>
-    </tr>
+        <td className="   p-3 text-red-400 hover:text-red-600 hover:font-medium cursor-pointer flex items-center">
+          <button
+            onClick={() => approveOrder(transactionID)}
+            className="bg-[#7A8489] px-2 py-1 rounded-md text-[12px] text-white"
+          >
+            Approve
+          </button>
+          <button
+            onClick={() => cancelOrder(transactionID)}
+            className="bg-[#C34747] mx-2 px-2 py-1 rounded-md text-[12px] text-white"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => completedOrder(transactionID)}
+            className="bg-[#47C363] px-2 py-1 rounded-md text-[12px] text-white"
+          >
+            Completed
+          </button>
+        </td>
+      </tr>
+    </>
   );
 };

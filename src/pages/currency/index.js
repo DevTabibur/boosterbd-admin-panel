@@ -7,6 +7,7 @@ import CardCurrancy from "./CardCurrancy";
 
 const index = () => {
   const [show, setShow] = useState(false);
+  
 
   return (
     <>
