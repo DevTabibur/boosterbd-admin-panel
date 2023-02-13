@@ -1,5 +1,6 @@
 import Sidebar from "@/Components/Sidebar/Sidebar";
 import Topbar from "@/Components/Topbar";
+import { limitUpdateDB } from "Database/limitUpdateDB";
 import Head from "next/head";
 import { useState } from "react";
 
@@ -36,7 +37,7 @@ const LimitUpdate = () => {
               show={show}
               setShow={setShow}
             />
-            <section className="main-right ml-[38px] px-10">
+            <div className="grid md:grid-cols-1 my-0 mx-10">
               <div className="flex justify-between mt-10">
                 <div className="w-[19px] h-[15px]">
                   <input type="checkbox" className="w-full h-full" />
@@ -159,36 +160,44 @@ const LimitUpdate = () => {
                   </button>
                 </div>
               </div>
+              <div className="overflow-x-auto">
+                <table className="table-auto w-full  mt-10 font-normal">
+                  <thead className="text-white">
+                    <tr className="text-black flex md:flex-row flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0 font-medium">
+                      <th className=" text-left text-[#717D82]">
+                        <div className="w-[15px] h-[15px]">
+                          <input type="checkbox" className="w-full h-full" />
+                        </div>
+                      </th>
+                      <th className="p-3 text-left text-[#717D82]">Name</th>
+                      <th className="p-3 text-left text-[#717D82]">
+                        Ad Account Name
+                      </th>
+                      <th className="p-3 text-left text-[#717D82]">
+                        Current Amount
+                      </th>
+                      <th className="p-3 text-left text-[#717D82]">
+                        Pending Amount
+                      </th>
+                      <th className="p-3 text-left text-[#717D82]">
+                        Payment Method
+                      </th>
+                      <th className="p-3 text-left text-[#717D82]">Status</th>
 
-              <table className="w-full flex flex-row flex-no-wrap sm:bg-white rounded-lg overflow-hidden mt-[26px]">
-                <thead className="text-white">
-                  <tr className="text-black flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0 font-medium">
-                    <th className=" text-left text-[#717D82]">
-                      <div className="w-[15px] h-[15px]">
-                        <input type="checkbox" className="w-full h-full" />
-                      </div>
-                    </th>
-                    <th className="p-3 text-left text-[#717D82]">Name</th>
-                    <th className="p-3 text-left text-[#717D82]">
-                      Ad Account Name
-                    </th>
-                    <th className="p-3 text-left text-[#717D82]">
-                      Current Ammount
-                    </th>
-                    <th className="p-3 text-left">Pending Amount</th>
-                    <th className="p-3 text-left">Payment Methode</th>
-                    <th className="p-3 text-left">Status</th>
-
-                    <th className="p-3 text-left">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="flex-1 sm:flex-none">
-                  <TableRow />
-                  <TableRow />
-                  <TableRow />
-                </tbody>
-              </table>
-            </section>
+                      <th className="p-3 text-left text-[#717D82]">Action</th>
+                    </tr>
+                  </thead>
+                  {/* dynamic table data */}
+                  {limitUpdateDB.map((limit, i) => {
+                    return (
+                      <tbody key={i}>
+                        <TableRow limit={limit} />
+                      </tbody>
+                    );
+                  })}
+                </table>
+              </div>
+            </div>
           </div>
         </section>
       </main>
@@ -198,34 +207,48 @@ const LimitUpdate = () => {
 
 export default LimitUpdate;
 
-const TableRow = ({ data }) => {
+const TableRow = ({ limit }) => {
+  const {
+    name,
+    adAccountName,
+    currentAmount,
+    pendingAmount,
+    paymentMethod,
+    status,
+  } = limit;
   return (
-    <tr className="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0 text-[14px]">
-      <td className="text-[#464F53] text-center">
-        <div className="w-[15px] h-[15px]">
-          <input type="checkbox" className="w-full h-full" />
-        </div>
-      </td>
-      <td className="text-[#464F53]   font-normal   p-3 truncate">Ibrahim</td>
-      <td className="text-[#464F53]   font-normal   p-3 ">Nell Akash</td>
-      <td className="text-[#464F53]   font-normal   p-3 ">150 $</td>
-      <td className="text-[#464F53]   font-normal   p-3 ">50$</td>
-      <td className="text-[#464F53]   font-normal   p-3 ">Bkash</td>
-      <td className="text-center">
-        <button className="bg-[#C3BE47] font-semibold text-black text-[12px] rounded-lg p-2">
-          Pending
-        </button>
-      </td>
-      <td>
-        <div className="flex  overflow-hidden">
-          <button className="bg-[#C34747] rounded-tl-md rounded-bl-lg font-semibold text-black text-[12px]  py-2 px-3">
-            Hold
+    <>
+      <tr className="flex md:flex-row flex-no wrap sm:table-row mb-2 sm:mb-0 text-[14px]">
+        <td className="text-[#464F53] text-center">
+          <div className="w-[15px] h-[15px]">
+            <input type="checkbox" className="w-full h-full" />
+          </div>
+        </td>
+        <td className="text-[#464F53]   font-normal   p-3 truncate">{name}</td>
+        <td className="text-[#464F53]   font-normal   p-3 ">{adAccountName}</td>
+        <td className="text-[#464F53]   font-normal   p-3 ">
+          ${currentAmount}
+        </td>
+        <td className="text-[#464F53]   font-normal   p-3 ">
+          ${pendingAmount}
+        </td>
+        <td className="text-[#464F53]   font-normal   p-3 ">{paymentMethod}</td>
+        <td className="text-center">
+          <button className="bg-[#C3BE47] font-semibold text-black text-[12px] rounded-lg p-2">
+            Pending
           </button>
-          <button className="bg-[#26C536] rounded-tr-md border-l rounded-br-lg font-semibold text-black text-[12px]  p-2">
-            Approve
-          </button>
-        </div>
-      </td>
-    </tr>
+        </td>
+        <td>
+          <div className="flex  overflow-hidden">
+            <button className="bg-[#C34747] rounded-tl-md rounded-bl-lg font-semibold text-black text-[12px]  py-2 px-3">
+              Hold
+            </button>
+            <button className="bg-[#26C536] rounded-tr-md border-l rounded-br-lg font-semibold text-black text-[12px]  p-2">
+              Approve
+            </button>
+          </div>
+        </td>
+      </tr>
+    </>
   );
 };

@@ -45,6 +45,9 @@ const index = () => {
             <div className="p-6 flex mb-2">
               <Link href={"/users/add-account"} className="text-3xl">Add Account Requests</Link>
             </div>
+            <div className="p-6 flex mb-2">
+              <Link href={"/users/limit-update"} className="text-3xl">Limit Update</Link>
+            </div>
 
           </div>
         </section>
