@@ -36,38 +36,43 @@ const Sidebar = ({ setShow, show }) => {
           <span className="ml-2">Dashboard</span>
         </h1>
 
+        {/* routes */}
         <div className="routes">
-          <ul>
+          <ul className="relative">
             {routes.map((r, index) => {
-              return (
-                <li key={index} className="relative flex items-center ">
-                  {router.pathname === r.path && (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={8}
-                      stroke="currentColor"
-                      className="w-4 h-4 absolute left-0 text-white"
+              {
+                return (
+                  <li key={index} className="relative flex items-center ">
+                    {router.pathname === r.path && (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={8}
+                        stroke="currentColor"
+                        className="w-4 h-4 absolute left-0 text-white"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z"
+                        />
+                      </svg>
+                    )}
+                    <Link
+                      href={r.path}
+                      className={`flex items-center pb-2 ${
+                        router.pathname === r.path && "active"
+                      } relative`}
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z"
-                      />
-                    </svg>
-                  )}
-                  <Link
-                    href={r.path}
-                    className={`flex items-center ${
-                      router.pathname === r.path && "active"
-                    } relative`}
-                  >
-                    <div className="mr-4">{r.icon}</div>
-                    <span className="ml-1 mt-[1px] text-[18px]">{r.route}</span>
-                  </Link>
-                </li>
-              );
+                      <div className="mr-4">{r.icon}</div>
+                      <span className="ml-1 mt-[1px] text-[18px]">
+                        {r.route}
+                      </span>
+                    </Link>
+                  </li>
+                );
+              }
             })}
           </ul>
         </div>
@@ -82,6 +87,7 @@ const routes = [
   {
     route: "Dashboard",
     path: "/",
+    sub_route: [],
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -100,6 +106,7 @@ const routes = [
   {
     route: "Products",
     path: "/products",
+    sub_route: [],
     icon: (
       <svg fill="currentColor" viewBox="0 0 16 16" className="w-6 h-6">
         <path d="M8.186 1.113a.5.5 0 00-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 011.114 0l7.129 2.852A.5.5 0 0116 3.5v8.662a1 1 0 01-.629.928l-7.185 2.874a.5.5 0 01-.372 0L.63 13.09a1 1 0 01-.63-.928V3.5a.5.5 0 01.314-.464L7.443.184z" />
@@ -109,6 +116,7 @@ const routes = [
   {
     route: "Analytic",
     path: "/analytic",
+    sub_route: [],
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
         <path d="M22.84 2.998v17.999a2.983 2.983 0 01-2.967 2.998 2.98 2.98 0 01-.368-.02 3.06 3.06 0 01-2.61-3.1V3.12A3.06 3.06 0 0119.51.02a2.983 2.983 0 013.329 2.978zM4.133 18.055a2.973 2.973 0 100 5.945 2.973 2.973 0 000-5.945zm7.872-9.01h-.05a3.06 3.06 0 00-2.892 3.126v7.985c0 2.167.954 3.482 2.35 3.763a2.978 2.978 0 003.57-2.927v-8.959a2.983 2.983 0 00-2.978-2.988z" />
@@ -127,6 +135,7 @@ const routes = [
   {
     route: "Customer",
     path: "/customer",
+    sub_route: [],
     icon: (
       <svg viewBox="0 0 512 512" fill="currentColor" className="w-6 h-6">
         <path
@@ -166,6 +175,7 @@ const routes = [
   {
     route: "Review",
     path: "/review",
+    sub_route: [],
     icon: (
       <svg fill="currentColor" viewBox="0 0 16 16" className="w-6 h-6">
         <path d="M14 1a1 1 0 011 1v8a1 1 0 01-1 1h-2.5a2 2 0 00-1.6.8L8 14.333 6.1 11.8a2 2 0 00-1.6-.8H2a1 1 0 01-1-1V2a1 1 0 011-1h12zM2 0a2 2 0 00-2 2v8a2 2 0 002 2h2.5a1 1 0 01.8.4l1.9 2.533a1 1 0 001.6 0l1.9-2.533a1 1 0 01.8-.4H14a2 2 0 002-2V2a2 2 0 00-2-2H2z" />
@@ -176,6 +186,7 @@ const routes = [
   {
     route: "Setting",
     path: "/setting",
+    sub_route: [{ route: "Currency", path: "/currency", icon: "" }],
     icon: (
       <svg viewBox="0 0 512 512" fill="currentColor" className="w-6 h-6">
         <path
@@ -192,6 +203,7 @@ const routes = [
   {
     route: "Log out",
     path: "/logout",
+    sub_route: [],
     icon: (
       <svg fill="none" viewBox="0 0 15 15" className="w-6 h-6">
         <path

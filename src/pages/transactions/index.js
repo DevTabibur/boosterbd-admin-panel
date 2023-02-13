@@ -29,11 +29,11 @@ const index = () => {
 
           <div className="right-side pb-7">
             <Topbar pageName={"Transactions"} show={show} setShow={setShow} />
-            <section className="main-right lg:ml-[38px] ">
-              <div className="">
-                <table className="w-full flex flex-row flex-no-wrap sm:bg-white rounded-lg overflow-hidden mt-10 font-normal">
+            <div className="grid md:grid-cols-1 my-0 mx-4 ">
+              <div className="overflow-x-auto">
+                <table className="table-auto w-full  mt-10 font-normal">
                   <thead className="text-white">
-                    <tr className="text-black flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0">
+                    <tr className="text-black flex md:flex-row flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0">
                       <th className="p-3 text-left text-[#717D82]">Date</th>
                       <th className="p-3 text-left text-[#717D82]">
                         Transaction ID
@@ -42,25 +42,21 @@ const index = () => {
                         Description
                       </th>
                       <th className="p-3 text-left text-[#717D82]">
-                        Payment Methode
+                        Payment Method
                       </th>
                       <th className="p-3 text-left text-[#717D82]">Remark</th>
+
+                      <th className="p-3 text-left text-[#717D82]">Amount</th>
                       <th className="p-3 text-left text-[#717D82]">Charge</th>
                       <th className="p-3 text-left text-[#717D82]">Action</th>
                     </tr>
                   </thead>
-                  <tbody className="flex-1 sm:flex-none">
-                    <TableRow />
-                    <TableRow />
-                    <TableRow />
-                    <TableRow />
-                    <TableRow />
-                    <TableRow />
-                    <TableRow />
+                  <tbody className="">
+                    {/* <TableRow /> */}
                   </tbody>
                 </table>
               </div>
-            </section>
+            </div>
           </div>
         </section>
       </main>
@@ -72,7 +68,7 @@ export default index;
 
 const TableRow = ({ data }) => {
   return (
-    <tr className="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0">
+    <tr className="flex md:flex-row flex-no-wrap sm:table-row mb-2 sm:mb-0">
       <td className="text-[#464F53] font-normal  p-3">27-Jan-2023</td>
       <td className="text-[#464F53] font-normal   p-3 truncate">PDF343gfmf</td>
       <td className=" text-[#464F53] font-normal  p-3 ">Pay by Bkash</td>

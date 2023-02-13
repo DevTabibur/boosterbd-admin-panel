@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 const Topbar = ({ pageName, color, size, show, setShow }) => {
@@ -102,7 +103,7 @@ const Topbar = ({ pageName, color, size, show, setShow }) => {
           aria-labelledby="dropdownMenuButton2"
         >
           <li>
-            <a
+            <Link
               className="
         dropdown-item
         text-sm
@@ -116,10 +117,10 @@ const Topbar = ({ pageName, color, size, show, setShow }) => {
         text-gray-700
         hover:bg-gray-100
       "
-              href="#"
+              href={`/users/profile/abc`}
             >
-              Action
-            </a>
+              Profile
+            </Link>
           </li>
           <li>
             <a
