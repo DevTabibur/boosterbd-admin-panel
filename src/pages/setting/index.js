@@ -39,6 +39,9 @@ const index = () => {
             <div className="p-6 flex mb-2">
               <Link href={"/users/profile/abc"} className="text-3xl">Profile</Link>
             </div>
+            <div className="p-6 flex mb-2">
+              <Link href={"/users"} className="text-3xl">Users</Link>
+            </div>
 
           </div>
         </section>
