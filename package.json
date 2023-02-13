@@ -19,8 +19,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.1",
     "react-hot-toast": "^2.4.0",
-    "recharts": "^2.3.2",
-    "tw-elements": "^1.0.0-alpha13"
+    "recharts": "^2.3.2"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",

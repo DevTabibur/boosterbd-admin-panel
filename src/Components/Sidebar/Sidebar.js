@@ -4,297 +4,75 @@ import { useRouter } from "next/router";
 
 const Sidebar = ({ setShow, show }) => {
   const router = useRouter();
-  const twElements = dynamic(() => import("../../DynamicImport/twElements"), {
-    ssr: false,
-  });
-  return (
-    <div className="side-bar relative">
-      {show && (
-        <button
-          className="mr-3 absolute right-0 top-[20px]"
-          onClick={() => {
-            setShow(false);
-          }}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
-      )}
-      <h1 className="logo flex items-center justify-center">
-        <img src="/images/logo.png" width={53} alt="" />
-        <span className="ml-2">Dashboard</span>
-      </h1>
 
-      <div className="routes">
-        <ul>
-          {routes.map((r, index) => {
-            return (
-              <li key={index} className="relative flex items-center ">
-                {router.pathname === r.path && (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={8}
-                    stroke="currentColor"
-                    className="w-4 h-4 absolute left-0 text-white"
+  return (
+    <>
+      <div className="side-bar relative">
+        {show && (
+          <button
+            className="mr-3 absolute right-0 top-[20px]"
+            onClick={() => {
+              setShow(false);
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        )}
+        <h1 className="logo flex items-center justify-center">
+          <img src="/images/logo.png" width={53} alt="" />
+          <span className="ml-2">Dashboard</span>
+        </h1>
+
+        <div className="routes">
+          <ul>
+            {routes.map((r, index) => {
+              return (
+                <li key={index} className="relative flex items-center ">
+                  {router.pathname === r.path && (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={8}
+                      stroke="currentColor"
+                      className="w-4 h-4 absolute left-0 text-white"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z"
+                      />
+                    </svg>
+                  )}
+                  <Link
+                    href={r.path}
+                    className={`flex items-center ${
+                      router.pathname === r.path && "active"
+                    } relative`}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z"
-                    />
-                  </svg>
-                )}
-                <Link
-                  href={r.path}
-                  className={`flex items-center ${
-                    router.pathname === r.path && "active"
-                  } relative`}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="w-5 h-5"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M3 6a3 3 0 013-3h2.25a3 3 0 013 3v2.25a3 3 0 01-3 3H6a3 3 0 01-3-3V6zm9.75 0a3 3 0 013-3H18a3 3 0 013 3v2.25a3 3 0 01-3 3h-2.25a3 3 0 01-3-3V6zM3 15.75a3 3 0 013-3h2.25a3 3 0 013 3V18a3 3 0 01-3 3H6a3 3 0 01-3-3v-2.25zm9.75 0a3 3 0 013-3H18a3 3 0 013 3V18a3 3 0 01-3 3h-2.25a3 3 0 01-3-3v-2.25z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="ml-1 mt-[1px] text-[18px]">{r.route}</span>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+                    <div className="mr-4">{r.icon}</div>
+                    <span className="ml-1 mt-[1px] text-[18px]">{r.route}</span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
-      {/* <div
-        className="w-60 h-full shadow-md bg-white px-1 absolute"
-        id="sidenavExample"
-      >
-        <ul className="relative">
-          <li className="relative" id="sidenavEx1">
-            <a
-              className="flex items-center text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out cursor-pointer"
-              data-mdb-ripple="true"
-              data-mdb-ripple-color="dark"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapseSidenavEx1"
-              aria-expanded="true"
-              aria-controls="collapseSidenavEx1"
-            >
-              <svg
-                aria-hidden="true"
-                focusable="false"
-                data-prefix="fas"
-                className="w-3 h-3 mr-3"
-                role="img"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  fill="currentColor"
-                  d="M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"
-                ></path>
-              </svg>
-              <span>Click here 1</span>
-              <svg
-                aria-hidden="true"
-                focusable="false"
-                data-prefix="fas"
-                className="w-3 h-3 ml-auto"
-                role="img"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 448 512"
-              >
-                <path
-                  fill="currentColor"
-                  d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
-                ></path>
-              </svg>
-            </a>
-            <ul
-              className="relative accordion-collapse collapse"
-              id="collapseSidenavEx1"
-              aria-labelledby="sidenavEx1"
-              data-bs-parent="#sidenavExample"
-            >
-              <li className="relative">
-                <a
-                  href="#!"
-                  className="flex items-center text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out"
-                  data-mdb-ripple="true"
-                  data-mdb-ripple-color="dark"
-                >
-                  Link 1
-                </a>
-              </li>
-              <li className="relative">
-                <a
-                  href="#!"
-                  className="flex items-center text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out"
-                  data-mdb-ripple="true"
-                  data-mdb-ripple-color="dark"
-                >
-                  Link 2
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li className="relative" id="sidenavEx2">
-            <a
-              className="flex items-center text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out cursor-pointer"
-              data-mdb-ripple="true"
-              data-mdb-ripple-color="dark"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapseSidenavEx2"
-              aria-expanded="false"
-              aria-controls="collapseSidenavEx2"
-            >
-              <svg
-                aria-hidden="true"
-                focusable="false"
-                data-prefix="fas"
-                className="w-3 h-3 mr-3"
-                role="img"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 496 512"
-              >
-                <path
-                  fill="currentColor"
-                  d="M336.5 160C322 70.7 287.8 8 248 8s-74 62.7-88.5 152h177zM152 256c0 22.2 1.2 43.5 3.3 64h185.3c2.1-20.5 3.3-41.8 3.3-64s-1.2-43.5-3.3-64H155.3c-2.1 20.5-3.3 41.8-3.3 64zm324.7-96c-28.6-67.9-86.5-120.4-158-141.6 24.4 33.8 41.2 84.7 50 141.6h108zM177.2 18.4C105.8 39.6 47.8 92.1 19.3 160h108c8.7-56.9 25.5-107.8 49.9-141.6zM487.4 192H372.7c2.1 21 3.3 42.5 3.3 64s-1.2 43-3.3 64h114.6c5.5-20.5 8.6-41.8 8.6-64s-3.1-43.5-8.5-64zM120 256c0-21.5 1.2-43 3.3-64H8.6C3.2 212.5 0 233.8 0 256s3.2 43.5 8.6 64h114.6c-2-21-3.2-42.5-3.2-64zm39.5 96c14.5 89.3 48.7 152 88.5 152s74-62.7 88.5-152h-177zm159.3 141.6c71.4-21.2 129.4-73.7 158-141.6h-108c-8.8 56.9-25.6 107.8-50 141.6zM19.3 352c28.6 67.9 86.5 120.4 158 141.6-24.4-33.8-41.2-84.7-50-141.6h-108z"
-                ></path>
-              </svg>
-              <span>Click here 2</span>
-              <svg
-                aria-hidden="true"
-                focusable="false"
-                data-prefix="fas"
-                className="w-3 h-3 ml-auto"
-                role="img"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 448 512"
-              >
-                <path
-                  fill="currentColor"
-                  d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
-                ></path>
-              </svg>
-            </a>
-            <ul
-              className="relative accordion-collapse collapse"
-              id="collapseSidenavEx2"
-              aria-labelledby="sidenavEx2"
-              data-bs-parent="#sidenavExample"
-            >
-              <li className="relative">
-                <a
-                  href="#!"
-                  className="flex items-center text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out"
-                  data-mdb-ripple="true"
-                  data-mdb-ripple-color="dark"
-                >
-                  Link 3
-                </a>
-              </li>
-              <li className="relative">
-                <a
-                  href="#!"
-                  className="flex items-center text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out"
-                  data-mdb-ripple="true"
-                  data-mdb-ripple-color="dark"
-                >
-                  Link 4
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li className="relative" id="sidenavEx3">
-            <a
-              className="flex items-center text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out cursor-pointer"
-              data-mdb-ripple="true"
-              data-mdb-ripple-color="dark"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapseSidenavEx3"
-              aria-expanded="false"
-              aria-controls="collapseSidenavEx3"
-            >
-              <svg
-                aria-hidden="true"
-                focusable="false"
-                data-prefix="fas"
-                className="w-3 h-3 mr-3"
-                role="img"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  fill="currentColor"
-                  d="M192 208c0-17.67-14.33-32-32-32h-16c-35.35 0-64 28.65-64 64v48c0 35.35 28.65 64 64 64h16c17.67 0 32-14.33 32-32V208zm176 144c35.35 0 64-28.65 64-64v-48c0-35.35-28.65-64-64-64h-16c-17.67 0-32 14.33-32 32v112c0 17.67 14.33 32 32 32h16zM256 0C113.18 0 4.58 118.83 0 256v16c0 8.84 7.16 16 16 16h16c8.84 0 16-7.16 16-16v-16c0-114.69 93.31-208 208-208s208 93.31 208 208h-.12c.08 2.43.12 165.72.12 165.72 0 23.35-18.93 42.28-42.28 42.28H320c0-26.51-21.49-48-48-48h-32c-26.51 0-48 21.49-48 48s21.49 48 48 48h181.72c49.86 0 90.28-40.42 90.28-90.28V256C507.42 118.83 398.82 0 256 0z"
-                ></path>
-              </svg>
-              <span>Click here 3</span>
-              <svg
-                aria-hidden="true"
-                focusable="false"
-                data-prefix="fas"
-                className="w-3 h-3 ml-auto"
-                role="img"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 448 512"
-              >
-                <path
-                  fill="currentColor"
-                  d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
-                ></path>
-              </svg>
-            </a>
-            <ul
-              className="relative accordion-collapse collapse"
-              id="collapseSidenavEx3"
-              aria-labelledby="sidenavEx3"
-              data-bs-parent="#sidenavExample"
-            >
-              <li className="relative">
-                <a
-                  href="#!"
-                  className="flex items-center text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out"
-                  data-mdb-ripple="true"
-                  data-mdb-ripple-color="dark"
-                >
-                  Link 5
-                </a>
-              </li>
-              <li className="relative">
-                <a
-                  href="#!"
-                  className="flex items-center text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out"
-                  data-mdb-ripple="true"
-                  data-mdb-ripple-color="dark"
-                >
-                  Link 6
-                </a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </div> */}
-    </div>
+    </>
   );
 };
 
@@ -304,31 +82,125 @@ const routes = [
   {
     route: "Dashboard",
     path: "/",
-    icon: "",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className="w-6 h-6"
+      >
+        <path
+          fillRule="evenodd"
+          d="M3 6a3 3 0 013-3h2.25a3 3 0 013 3v2.25a3 3 0 01-3 3H6a3 3 0 01-3-3V6zm9.75 0a3 3 0 013-3H18a3 3 0 013 3v2.25a3 3 0 01-3 3h-2.25a3 3 0 01-3-3V6zM3 15.75a3 3 0 013-3h2.25a3 3 0 013 3V18a3 3 0 01-3 3H6a3 3 0 01-3-3v-2.25zm9.75 0a3 3 0 013-3H18a3 3 0 013 3V18a3 3 0 01-3 3h-2.25a3 3 0 01-3-3v-2.25z"
+          clipRule="evenodd"
+        />
+      </svg>
+    ),
   },
   {
     route: "Products",
     path: "/products",
-    icon: "",
+    icon: (
+      <svg fill="currentColor" viewBox="0 0 16 16" className="w-6 h-6">
+        <path d="M8.186 1.113a.5.5 0 00-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 011.114 0l7.129 2.852A.5.5 0 0116 3.5v8.662a1 1 0 01-.629.928l-7.185 2.874a.5.5 0 01-.372 0L.63 13.09a1 1 0 01-.63-.928V3.5a.5.5 0 01.314-.464L7.443.184z" />
+      </svg>
+    ),
   },
   {
     route: "Analytic",
     path: "/analytic",
-    icon: "",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+        <path d="M22.84 2.998v17.999a2.983 2.983 0 01-2.967 2.998 2.98 2.98 0 01-.368-.02 3.06 3.06 0 01-2.61-3.1V3.12A3.06 3.06 0 0119.51.02a2.983 2.983 0 013.329 2.978zM4.133 18.055a2.973 2.973 0 100 5.945 2.973 2.973 0 000-5.945zm7.872-9.01h-.05a3.06 3.06 0 00-2.892 3.126v7.985c0 2.167.954 3.482 2.35 3.763a2.978 2.978 0 003.57-2.927v-8.959a2.983 2.983 0 00-2.978-2.988z" />
+      </svg>
+    ),
   },
   {
     route: "Order",
     path: "/order",
-    icon: "",
+    icon: (
+      <svg fill="currentColor" viewBox="0 0 16 16" className="w-6 h-6">
+        <path d="M0 1.5A.5.5 0 01.5 1H2a.5.5 0 01.485.379L2.89 3H14.5a.5.5 0 01.49.598l-1 5a.5.5 0 01-.465.401l-9.397.472L4.415 11H13a.5.5 0 010 1H4a.5.5 0 01-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 01-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 100 4 2 2 0 000-4zm7 0a2 2 0 100 4 2 2 0 000-4zm-7 1a1 1 0 110 2 1 1 0 010-2zm7 0a1 1 0 110 2 1 1 0 010-2z" />
+      </svg>
+    ),
   },
   {
     route: "Customer",
     path: "/customer",
-    icon: "",
+    icon: (
+      <svg viewBox="0 0 512 512" fill="currentColor" className="w-6 h-6">
+        <path
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={32}
+          d="M402 168c-2.93 40.67-33.1 72-66 72s-63.12-31.32-66-72c-3-42.31 26.37-72 66-72s69 30.46 66 72z"
+        />
+        <path
+          fill="none"
+          stroke="currentColor"
+          strokeMiterlimit={10}
+          strokeWidth={32}
+          d="M336 304c-65.17 0-127.84 32.37-143.54 95.41-2.08 8.34 3.15 16.59 11.72 16.59h263.65c8.57 0 13.77-8.25 11.72-16.59C463.85 335.36 401.18 304 336 304z"
+        />
+        <path
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={32}
+          d="M200 185.94c-2.34 32.48-26.72 58.06-53 58.06s-50.7-25.57-53-58.06C91.61 152.15 115.34 128 147 128s55.39 24.77 53 57.94z"
+        />
+        <path
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeMiterlimit={10}
+          strokeWidth={32}
+          d="M206 306c-18.05-8.27-37.93-11.45-59-11.45-52 0-102.1 25.85-114.65 76.2-1.65 6.66 2.53 13.25 9.37 13.25H154"
+        />
+      </svg>
+    ),
   },
   {
     route: "Review",
     path: "/review",
-    icon: "",
+    icon: (
+      <svg fill="currentColor" viewBox="0 0 16 16" className="w-6 h-6">
+        <path d="M14 1a1 1 0 011 1v8a1 1 0 01-1 1h-2.5a2 2 0 00-1.6.8L8 14.333 6.1 11.8a2 2 0 00-1.6-.8H2a1 1 0 01-1-1V2a1 1 0 011-1h12zM2 0a2 2 0 00-2 2v8a2 2 0 002 2h2.5a1 1 0 01.8.4l1.9 2.533a1 1 0 001.6 0l1.9-2.533a1 1 0 01.8-.4H14a2 2 0 002-2V2a2 2 0 00-2-2H2z" />
+        <path d="M5 6a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 11-2 0 1 1 0 012 0z" />
+      </svg>
+    ),
+  },
+  {
+    route: "Setting",
+    path: "/setting",
+    icon: (
+      <svg viewBox="0 0 512 512" fill="currentColor" className="w-6 h-6">
+        <path
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={32}
+          d="M262.29 192.31a64 64 0 1057.4 57.4 64.13 64.13 0 00-57.4-57.4zM416.39 256a154.34 154.34 0 01-1.53 20.79l45.21 35.46a10.81 10.81 0 012.45 13.75l-42.77 74a10.81 10.81 0 01-13.14 4.59l-44.9-18.08a16.11 16.11 0 00-15.17 1.75A164.48 164.48 0 01325 400.8a15.94 15.94 0 00-8.82 12.14l-6.73 47.89a11.08 11.08 0 01-10.68 9.17h-85.54a11.11 11.11 0 01-10.69-8.87l-6.72-47.82a16.07 16.07 0 00-9-12.22 155.3 155.3 0 01-21.46-12.57 16 16 0 00-15.11-1.71l-44.89 18.07a10.81 10.81 0 01-13.14-4.58l-42.77-74a10.8 10.8 0 012.45-13.75l38.21-30a16.05 16.05 0 006-14.08c-.36-4.17-.58-8.33-.58-12.5s.21-8.27.58-12.35a16 16 0 00-6.07-13.94l-38.19-30A10.81 10.81 0 0149.48 186l42.77-74a10.81 10.81 0 0113.14-4.59l44.9 18.08a16.11 16.11 0 0015.17-1.75A164.48 164.48 0 01187 111.2a15.94 15.94 0 008.82-12.14l6.73-47.89A11.08 11.08 0 01213.23 42h85.54a11.11 11.11 0 0110.69 8.87l6.72 47.82a16.07 16.07 0 009 12.22 155.3 155.3 0 0121.46 12.57 16 16 0 0015.11 1.71l44.89-18.07a10.81 10.81 0 0113.14 4.58l42.77 74a10.8 10.8 0 01-2.45 13.75l-38.21 30a16.05 16.05 0 00-6.05 14.08c.33 4.14.55 8.3.55 12.47z"
+        />
+      </svg>
+    ),
+  },
+  {
+    route: "Log out",
+    path: "/logout",
+    icon: (
+      <svg fill="none" viewBox="0 0 15 15" className="w-6 h-6">
+        <path
+          fill="currentColor"
+          fillRule="evenodd"
+          d="M3 1a1 1 0 00-1 1v11a1 1 0 001 1h7.5a.5.5 0 000-1H3V2h7.5a.5.5 0 000-1H3zm9.604 3.896a.5.5 0 00-.708.708L13.293 7H6.5a.5.5 0 000 1h6.793l-1.397 1.396a.5.5 0 00.708.708l2.25-2.25a.5.5 0 000-.708l-2.25-2.25z"
+          clipRule="evenodd"
+        />
+      </svg>
+    ),
   },
 ];

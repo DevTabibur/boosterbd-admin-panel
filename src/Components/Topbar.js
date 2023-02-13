@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -74,17 +75,93 @@ const Topbar = ({ pageName, color, size, show, setShow }) => {
         </svg>
       </button>
 
-      <div className="flex items-center">
-        <img
-          src="/images/avater.png"
-          className=" rounded-lg"
-          width={43}
-          alt=""
-        />
-        <h3 className={`text-[18.67px] ml-2 `}>Super Admin</h3>
-        <button className="ml-2 primary font-bold">
-          <Image src="/images/Vector.png" width={18} height={12} alt="" />
-        </button>
+      <div className="dropdown relative">
+        <a
+          className="dropdown-toggle flex items-center hidden-arrow"
+          href="#"
+          id="dropdownMenuButton2"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <img
+            src="https://mdbootstrap.com/img/new/avatars/2.jpg"
+            className="rounded-lg"
+            style={{ height: "40px", width: "40px" }}
+            alt=""
+            loading="lazy"
+          />
+          <h3 className={`text-[18.67px] ml-2 `}>Super Admin</h3>
+          <button className="ml-2 primary font-bold">
+            <Image src="/images/Vector.png" width={18} height={12} alt="" />
+          </button>
+        </a>
+        <ul
+          className="dropdown-menu min-w-max absolute hidden bg-white text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none left-auto right-0
+  "
+          aria-labelledby="dropdownMenuButton2"
+        >
+          <li>
+            <a
+              className="
+        dropdown-item
+        text-sm
+        py-2
+        px-4
+        font-normal
+        block
+        w-full
+        whitespace-nowrap
+        bg-transparent
+        text-gray-700
+        hover:bg-gray-100
+      "
+              href="#"
+            >
+              Action
+            </a>
+          </li>
+          <li>
+            <a
+              className="
+        dropdown-item
+        text-sm
+        py-2
+        px-4
+        font-normal
+        block
+        w-full
+        whitespace-nowrap
+        bg-transparent
+        text-gray-700
+        hover:bg-gray-100
+      "
+              href="#"
+            >
+              Another action
+            </a>
+          </li>
+          <li>
+            <a
+              className="
+        dropdown-item
+        text-sm
+        py-2
+        px-4
+        font-normal
+        block
+        w-full
+        whitespace-nowrap
+        bg-transparent
+        text-gray-700
+        hover:bg-gray-100
+      "
+              href="#"
+            >
+              Something else here
+            </a>
+          </li>
+        </ul>
       </div>
       {showSearch && (
         <div className="absolute px-5 top-[100px] flex justify-center items-center left-0 right-0 w-full h-96 s-modal">
