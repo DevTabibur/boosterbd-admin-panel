@@ -1,8 +1,24 @@
+import Loader from "@/Components/Shared/Loader/Loader";
+import useActiveUser from "@/Hooks/useActiveUser";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
+const Swal = require("sweetalert2");
 
 const register = () => {
+  const [activeUser, isLoading] = useActiveUser();
+  const [registerLoading, setRegisterLoading] = useState(false);
+  const [isActive, setIsActive] = useState("");
+
+  useEffect(() => {
+    const isActiveValue = localStorage.getItem("accessToken");
+    setIsActive(isActiveValue);
+  }, []);
+
+  const router = useRouter();
+  // const location = useLocation();
+  // const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -10,8 +26,57 @@ const register = () => {
     formState: { errors },
   } = useForm();
   const onSubmit = async (data, e) => {
-    console.log(data);
+    // if user is register once, then he'll not register again before logout.
+    if (isActive) {
+      Swal.fire({
+        title: "Authentication is failed",
+        text: "Please logout for again registration",
+        icon: "error",
+      });
+    } else {
+      const url = `http://localhost:5000/api/v1/user/register`;
+      setRegisterLoading(true);
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("data inside register", data);
+          if (data.code === 400) {
+            Swal.fire({
+              title: data.status,
+              text: data?.message,
+              icon: "error",
+            });
+          } else if (data.code === 200) {
+            // console.log("everything is perfect", data);
+            const token = data?.data?.token;
+            localStorage.setItem("accessToken", JSON.stringify(token));
+            Swal.fire({
+              title: "success",
+              text: data?.message,
+              icon: "success",
+            });
+            // it'll giving error. because nextjs is a server side rendering method. so it'll not defined window
+            // navigate("/");
+            // window.location.reload();
+            // nextjs routing system is that:
+            router.push("/");
+          }
+          setRegisterLoading(false);
+        });
+    }
   };
+
+  // register loading
+  if (registerLoading) {
+    return <Loader />;
+  }
+
   return (
     <>
       <section className="h-screen">
@@ -117,11 +182,16 @@ const register = () => {
                     )}
                   </label>
                 </div>
+                <div className="flex justify-between items-center mb-6">
+                  <Link href={"/"} className="text-green-800 font-bold">
+                    Home
+                  </Link>
+                </div>
 
                 <div className="text-center lg:text-left">
                   <input
                     type="submit"
-                    value="Login"
+                    value="Register"
                     className="inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
                   />
 

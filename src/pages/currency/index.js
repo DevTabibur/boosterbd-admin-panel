@@ -35,7 +35,7 @@ const index = () => {
 
             <section className="main-right  px-5 ">
               <div className="col-span-8">
-                <div className="ststistics w-full grid lg:grid-cols-3  md:grid-cols-2 grid-cols-1 mt-[53px] justify-between gap-10">
+                <div className="ststistics  grid md:grid-cols-3  mt-[53px]  gap-10">
                   {currancys.map((cr, index) => {
                     return (
                       <CardCurrancy

@@ -1,17 +1,77 @@
+import Loader from "@/Components/Shared/Loader/Loader";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";
 
 const login = () => {
+  const router = useRouter();
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [getToken, setGetToken] = useState("");
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    const getTokenFromLocalStorage = localStorage.getItem("accessToken");
+    setGetToken(getTokenFromLocalStorage)
+  }, []);
+
+  const url = `http://localhost:5000/api/v1/user/login`;
+
   const onSubmit = async (data, e) => {
-    console.log(data);
+    console.log("login data", data);
+    if (getToken) {
+      Swal.fire({
+        title: "Failed",
+        text: "Please Logout for again login",
+        icon: "error",
+      });
+    } else {
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          // console.log("data", data);
+          if (data.code === 200) {
+            Swal.fire({
+              title: data?.status,
+              text: data?.message,
+              icon: "success",
+            });
+            const token = data?.data?.token;
+            localStorage.setItem("accessToken", JSON.stringify(token));
+            router.push("/");
+            // window.location.reload();
+          } else if (
+            data.code === 401 ||
+            data.code === 403 ||
+            data.code === 400
+          ) {
+            Swal.fire({
+              title: data?.status,
+              text: data?.error,
+              icon: "error",
+            });
+          }
+        });
+    }
   };
+
+  // for loader
+  if (loginLoading) {
+    return <Loader />;
+  }
+
   return (
     <>
       <section className="h-screen">
@@ -98,6 +158,9 @@ const login = () => {
                 <div className="flex justify-between items-center mb-6">
                   <Link href={"/forget-password"} className="text-gray-800">
                     Forgot password?
+                  </Link>
+                  <Link href={"/"} className="text-green-800 font-bold">
+                    Home
                   </Link>
                 </div>
 

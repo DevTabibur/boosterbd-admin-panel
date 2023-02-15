@@ -1,11 +1,14 @@
+import Loader from "@/Components/Shared/Loader/Loader";
 import Sidebar from "@/Components/Sidebar/Sidebar";
 import Topbar from "@/Components/Topbar";
+import useUser from "@/Hooks/useUser";
 import { usersDB } from "Database/users";
 import Head from "next/head";
 import { useState } from "react";
 
 const index = () => {
   const [show, setShow] = useState(false);
+  const [users] = useUser();
   const userDetails = (name) => {
     alert(name);
   };
@@ -47,7 +50,7 @@ const index = () => {
                     </tr>
                   </thead>
                   {/* table dynamic users data */}
-                  {usersDB.map((user, i) => {
+                  {users.map((user, i) => {
                     return (
                       <tbody key={i}>
                         <TableRow user={user} userDetails={userDetails} />
@@ -93,7 +96,7 @@ const TableRow = ({ userDetails, user }) => {
           >
             Details
           </button>
-          
+
           <div
             className="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
             id="staticBackdrop"
@@ -119,7 +122,9 @@ const TableRow = ({ userDetails, user }) => {
                     aria-label="Close"
                   ></button>
                 </div>
-                <div className="modal-body relative p-4">{email}.{country}.{status}</div>
+                <div className="modal-body relative p-4">
+                  {email}.{country}.{status}
+                </div>
                 <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
                   <button
                     type="button"

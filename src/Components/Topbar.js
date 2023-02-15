@@ -1,10 +1,55 @@
+import useActiveUser from "@/Hooks/useActiveUser";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
+import Swal from "sweetalert2";
+import Loader from "./Shared/Loader/Loader";
 
 const Topbar = ({ pageName, color, size, show, setShow }) => {
+  const [activeUser, isLoading] = useActiveUser();
   const [showSearch, setSearch] = useState(false);
+  const router = useRouter();
+
+  console.log("activeUser", activeUser);
+  const logOut = (id) => {
+    console.log("id", id);
+    const url = `http://localhost:5000/api/v1/user/register/updateStatus/${id}`;
+    fetch(url, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+      // body: JSON.stringify({ status: "inactive" }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("logout status inactivated", data);
+        localStorage.removeItem("accessToken");
+        if (data.code === 400) {
+          Swal.fire({
+            title: data?.status,
+            text: data?.message,
+            icon: "error",
+          });
+        } else {
+          Swal.fire({
+            title: "Logout Successfully",
+            icon: "success",
+          });
+          router.push("/");
+        }
+      });
+
+    // navigate("/");
+    // window.location.reload();
+  };
+
+  // if (isLoading) {
+  //   return <Loader />;
+  // }
+
   return (
     <div className="top-bar shadow-lg shadow-gray-200 flex justify-between items-center px-10">
       <h1 className={`logo text-[${color}] flex items-center`}>
@@ -92,7 +137,7 @@ const Topbar = ({ pageName, color, size, show, setShow }) => {
             alt=""
             loading="lazy"
           />
-          <h3 className={`text-[18.67px] ml-2 `}>Super Admin</h3>
+          <h3 className={`text-[18.67px] ml-2 `}>Admin</h3>
           <button className="ml-2 primary font-bold">
             <Image src="/images/Vector.png" width={18} height={12} alt="" />
           </button>
@@ -104,64 +149,32 @@ const Topbar = ({ pageName, color, size, show, setShow }) => {
         >
           <li>
             <Link
-              className="
-        dropdown-item
-        text-sm
-        py-2
-        px-4
-        font-normal
-        block
-        w-full
-        whitespace-nowrap
-        bg-transparent
-        text-gray-700
-        hover:bg-gray-100
-      "
+              className="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-700 hover:bg-gray-100"
               href={`/users/profile/abc`}
             >
-              Profile
+              Profile ({activeUser?.name && activeUser?.name?.slice(0, 6)})..
             </Link>
           </li>
           <li>
             <a
-              className="
-        dropdown-item
-        text-sm
-        py-2
-        px-4
-        font-normal
-        block
-        w-full
-        whitespace-nowrap
-        bg-transparent
-        text-gray-700
-        hover:bg-gray-100
-      "
+              className="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-700 hover:bg-gray-100"
               href="#"
             >
-              Another action
+              Another Action
             </a>
           </li>
-          <li>
-            <a
-              className="
-        dropdown-item
-        text-sm
-        py-2
-        px-4
-        font-normal
-        block
-        w-full
-        whitespace-nowrap
-        bg-transparent
-        text-gray-700
-        hover:bg-gray-100
-      "
-              href="#"
+          {activeUser?.email ? (
+            <li
+              onClick={() => logOut(activeUser?._id)}
+              className="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-700 hover:bg-gray-100"
             >
-              Something else here
-            </a>
-          </li>
+              Log out
+            </li>
+          ) : (
+            <li className="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-700 hover:bg-gray-100">
+              <Link href={"/login"}>Login</Link>
+            </li>
+          )}
         </ul>
       </div>
       {showSearch && (

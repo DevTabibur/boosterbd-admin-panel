@@ -1,9 +1,11 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Loader from "../Shared/Loader/Loader";
 
 const Sidebar = ({ setShow, show }) => {
   const router = useRouter();
+  
 
   return (
     <>
@@ -201,8 +203,8 @@ const routes = [
     ),
   },
   {
-    route: "Log out",
-    path: "/logout",
+    route: "Login",
+    path: "/login",
     sub_route: [],
     icon: (
       <svg fill="none" viewBox="0 0 15 15" className="w-6 h-6">
