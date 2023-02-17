@@ -12,7 +12,6 @@ const Topbar = ({ pageName, color, size, show, setShow }) => {
   const [showSearch, setSearch] = useState(false);
   const router = useRouter();
 
-  console.log("activeUser", activeUser);
   const logOut = (id) => {
     console.log("id", id);
     const url = `http://localhost:5000/api/v1/user/register/updateStatus/${id}`;
@@ -150,7 +149,7 @@ const Topbar = ({ pageName, color, size, show, setShow }) => {
           <li>
             <Link
               className="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-700 hover:bg-gray-100"
-              href={`/users/profile/abc`}
+              href={`/users/profile/${activeUser?.email}`}
             >
               Profile ({activeUser?.name && activeUser?.name?.slice(0, 6)})..
             </Link>

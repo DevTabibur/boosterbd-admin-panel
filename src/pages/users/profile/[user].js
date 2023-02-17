@@ -1,14 +1,160 @@
+import Loader from "@/Components/Shared/Loader/Loader";
 import Sidebar from "@/Components/Sidebar/Sidebar";
 import Topbar from "@/Components/Topbar";
+import useActiveUser from "@/Hooks/useActiveUser";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";
 
-const index = () => {
-  const router = useRouter();
-  const { user } = router.query;
+const index = ({ user }) => {
   const [show, setShow] = useState(false);
+  const [activeUser, isLoading] = useActiveUser();
+  const { email, _id } = activeUser;
+  const router = useRouter();
+
+  // const { slug } = router;
+  // useEffect(() => {
+  //   if (activeUser?.email !== undefined ) {
+  //     setEmail(activeUser?.email);
+  //     setId(activeUser?._id)
+  //   }
+  // }, [activeUser?.email]);
+
+  // useEffect(() =>{
+  //   if(activeUser?._id !== undefined){
+  //     setId(activeUser?._id)
+  //   }
+  // }, [activeUser?._id])
+
+  // console.log('email', email)
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async (data, e) => {
+    console.log("data", data);
+    const formData = new FormData();
+    // formData.append("email", email);
+    // formData.append("name", data.name);
+    // formData.append("phoneNumber", data.phoneNumber);
+    // formData.append("address", data.address);
+    // formData.append("whatsappNumber", data.whatsappNumber);
+    // formData.append("behance", data.behance);
+    // formData.append("companyWebsite", data.companyWebsite);
+    // formData.append("linkedInProfile", data.linkedInProfile);
+    // formData.append("githubProfile", data.githubProfile);
+    formData.append("nid", data.nid);
+    formData.append("tin", data.tin);
+    formData.append("bin", data.bin);
+    formData.append("imageURL", data.imageURL[0]);
+    formData.append("binFile", data.binFile[0]);
+    formData.append("tinFile", data.tinFile[0]);
+    formData.append("nidFile", data.nidFile[0]);
+
+    const img = data?.imageURL[0];
+    // const bin = data?.binFile[0];
+    // const tin = data?.tinFile[0];
+    // const nid = data?.nidFile[0];
+    const validExt = ["png", "jpg", "jpeg", "PNG", "JPG", "JPEG"];
+
+    if (img !== "" || bin !== "" || tin !== "" || nid !== "") {
+      // checking image extension
+      // imageName.jpeg
+      const pos_of_dot_of_img = img?.name.lastIndexOf(".") + 1;
+      // const pos_of_dot_of_nid = nid?.name.lastIndexOf(".") + 1;
+      // const pos_of_dot_of_bin = bin?.name.lastIndexOf(".") + 1;
+      // const pos_of_dot_of_tin = tin?.name.lastIndexOf(".") + 1;
+      console.log("pos_of_dot_of_img, ", pos_of_dot_of_img);
+      // console.log("pos_of_dot_of_nid, ", pos_of_dot_of_nid);
+      // console.log("pos_of_dot_of_bin, ", pos_of_dot_of_bin);
+      // console.log("pos_of_dot_of_tin, ", pos_of_dot_of_tin);
+
+      const img_ext = img?.name.substring(pos_of_dot_of_img);
+      // const tin_ext = tin?.name.substring(pos_of_dot_of_tin);
+      // const nid_ext = nid?.name.substring(pos_of_dot_of_nid);
+      // const bin_ext = bin?.name.substring(pos_of_dot_of_bin);
+
+      console.log("img_ext", img_ext);
+      // console.log("tin_ext", tin_ext);
+      // console.log("nid_ext", nid_ext);
+      // console.log("bin_ext", bin_ext);
+
+      const result_of_img = validExt.includes(img_ext);
+      // const result_of_nid = validExt.includes(nid_ext);
+      // const result_of_tin = validExt.includes(tin_ext);
+      // const result_of_bin = validExt.includes(bin_ext);
+
+      console.log("result_of_img", result_of_img);
+      // console.log("result_of_nid", result_of_nid);
+      // console.log("result_of_tin", result_of_tin);
+      // console.log("result_of_bin", result_of_bin);
+
+      if (
+        result_of_img === false
+        // result_of_nid === false ||
+        // result_of_tin === false ||
+        // result_of_bin === false
+      ) {
+        Swal.fire({
+          title: "Only jpg, png and jpeg files are allowed",
+          icon: "warning",
+        });
+        return false;
+      }
+      // checking image size
+      else {
+        if (parseFloat(img.size / (1024 * 1024)) >= 5) {
+          // img size should be under 5 mb
+          // perform operation
+          Swal.fire({
+            title: "File Size must be smaller than 5MB",
+            icon: "warning",
+          });
+          return false;
+        } else {
+          console.log("everything is perfect");
+          // everything is perfect
+          const url = `http://localhost:5000/api/v1/user/register/${_id}`;
+          fetch(url, {
+            method: "PUT",
+            headers: {
+              authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+            body: formData,
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              console.log("data posted", data);
+              if (data.code === 400) {
+                Swal.fire({
+                  title: data?.message,
+                  text: data?.error,
+                  icon: "error",
+                });
+              } else {
+                Swal.fire({
+                  title: data.status,
+                  text: data?.message,
+                  icon: "success",
+                });
+                reset();
+                // window.location.reload();
+              }
+            });
+        }
+      }
+    } else {
+      alert("No Image is selected");
+      return false;
+    }
+  };
 
   return (
     <>
@@ -54,216 +200,268 @@ const index = () => {
                 </div>
 
                 <form
-                  action=""
+                  onSubmit={handleSubmit(onSubmit)}
                   className="lg:col-span-10 col-span-12 gap-5 grid grid-cols-12 mt-5 w-full"
                 >
-                  <div className="lg:col-span-6 col-span-12">
+                  {/* name */}
+                  {/* <div className="lg:col-span-6 col-span-12">
                     <label className="text-[16.27px] font-medium">Name</label>
                     <input
                       type="text"
                       className="border mt-2 border-black w-full rounded-md px-3 font-medium py-1"
                       placeholder="Name"
-                      name="name"
+                      {...register("name", {
+                        required: {
+                          value: true,
+                          message: "Name is Required",
+                        },
+                      })}
                     />
+                    <label className="flex justify-between items-center">
+                      {errors.name?.type === "required" && (
+                        <span className="label-text-alt text-red-600 ">
+                          {errors.name.message}
+                        </span>
+                      )}
+                    </label>
+                  </div> */}
+                  {/* avatar image */}
+                  <div className="lg:col-span-6 col-span-12">
+                    <label className="text-[16.27px] font-medium">
+                      Profile Image
+                    </label>
+                    <input
+                      type="file"
+                      className="border mt-2 border-black w-full rounded-md px-3 font-medium py-1"
+                      placeholder="profile image"
+                      {...register("imageURL", {
+                        required: {
+                          value: true,
+                          message: "profile image is Required",
+                        },
+                      })}
+                    />
+                    <label className="flex justify-between items-center">
+                      {errors.imageURL?.type === "required" && (
+                        <span className="label-text-alt text-red-600 ">
+                          {errors.imageURL.message}
+                        </span>
+                      )}
+                    </label>
                   </div>
-
-                  <div className="col-span-12">
-                    <label className="text-[16.27px] font-medium">Adress</label>
+                  {/* address */}
+                  {/* <div className="col-span-12">
+                    <label className="text-[16.27px] font-medium">
+                      Address
+                    </label>
                     <input
                       type="text"
-                      name="adress"
                       className="border mt-2 border-black w-full rounded-md px-3 font-medium py-1"
-                      placeholder="Adress"
+                      placeholder="Address"
+                      {...register("address", {
+                        required: {
+                          value: true,
+                          message: "Address is Required",
+                        },
+                      })}
                     />
-                  </div>
-                  <div className="lg:col-span-6 col-span-12">
+                    <label className="flex justify-between items-center">
+                      {errors.address?.type === "required" && (
+                        <span className="label-text-alt text-red-600 ">
+                          {errors.address.message}
+                        </span>
+                      )}
+                    </label>
+                  </div> */}
+                  {/* phoneNumber */}
+                  {/* <div className="lg:col-span-6 col-span-12">
                     <label className="text-[16.27px] font-medium">
                       Phone Number
                     </label>
                     <div className="md:flex lg:flex block items-center mt-2">
                       <input
                         type="text"
-                        name="phoneNumber"
                         className="border  border-black w-full rounded-md px-3 font-medium py-1"
                         placeholder="Phone Number"
+                        {...register("phoneNumber", {
+                          required: {
+                            value: true,
+                            message: "Phone Number is Required",
+                          },
+                        })}
                       />
+
                       <button className="bg-[#47C363] px-[23px] py-[6px] text-[white] font-medium md:ml-2 mt-1 rounded-lg">
                         Verified
                       </button>
                     </div>
-                  </div>
-
-                  <div className="lg:col-span-6 col-span-12">
+                    <label className="flex justify-between items-center">
+                      {errors.phoneNumber?.type === "required" && (
+                        <span className="label-text-alt text-red-600 ">
+                          {errors.phoneNumber.message}
+                        </span>
+                      )}
+                    </label>
+                  </div> */}
+                  {/* behance */}
+                  {/* <div className="lg:col-span-6 col-span-12">
                     <label className="text-[16.27px] font-medium">
                       Behance
                     </label>
                     <input
                       type="text"
-                      name="behance"
                       className="border mt-2 border-black w-full rounded-md px-3 font-medium py-1"
-                      placeholder="Behance"
+                      placeholder="Behance Link"
+                      {...register("behance")}
                     />
-                  </div>
-
-                  <div className="lg:col-span-6 col-span-12">
+                  </div> */}
+                  {/* whatsappNumber */}
+                  {/* <div className="lg:col-span-6 col-span-12">
                     <label className="text-[16.27px] font-medium">
                       Whatsapp Number
                     </label>
                     <div className="md:flex lg:flex block items-center justify-between mt-2">
                       <input
                         type="text"
-                        name="whatsappNumber"
                         className="border  border-black w-full rounded-md px-3 font-medium py-1"
                         placeholder="Whatsapp Number"
+                        {...register("whatsappNumber")}
                       />
                       <button className="bg-[#7A8489] w-[122px] px-[8px] py-[6px] text-[white] font-medium md:ml-2 mt-1 rounded-lg flex">
                         Verify Now
                       </button>
                     </div>
-                  </div>
-                  <div className="lg:col-span-6 col-span-12">
+                  </div> */}
+                  {/* company website */}
+                  {/* <div className="lg:col-span-6 col-span-12">
                     <label className="text-[16.27px] font-medium">
                       Company Website
                     </label>
                     <input
                       type="text"
-                      name="we-name"
                       className="border mt-2 border-black w-full rounded-md px-3 font-medium py-1"
                       placeholder="Company Website"
+                      {...register("companyWebsite")}
                     />
-                  </div>
-                  <div className="lg:col-span-6 col-span-12">
+                  </div> */}
+                  {/* email */}
+                  {/* <div className="lg:col-span-6 col-span-12 cursor-not-allowed">
                     <label className="text-[16.27px] font-medium">Email</label>
                     <div className="md:flex lg:flex block items-center justify-between mt-2">
                       <input
                         type="text"
                         name="email"
-                        className="border  border-black w-full rounded-md px-3 font-medium py-1"
+                        className="border  border-black w-full rounded-md px-3 font-medium py-1 cursor-not-allowed"
                         placeholder="Email"
+                        defaultValue={email}
+                        readOnly
+                        {...register("email")}
                       />
                       <button className="bg-[#7A8489] w-[122px] px-[8px] py-[6px] text-[white] font-medium md:ml-2 mt-1 rounded-lg flex">
                         Verify Now
                       </button>
                     </div>
-                  </div>
-
+                  </div> */}
+                  {/* nid */}
                   <div className="lg:col-span-6 col-span-12">
                     <label className="text-[16.27px] font-medium">NID</label>
                     <div className="md:flex lg:flex block items-center justify-between mt-2">
                       <input
                         type="text"
-                        name="nid"
                         className="border  border-black w-full rounded-md px-3 font-medium py-1"
                         placeholder="Nid"
+                        name="nid"
+                        {...register("nid")}
                       />
                       <label
                         htmlFor="nid"
-                        className="border border-black w-[145.02px] px-[8px] py-[6px] text-black font-medium md:ml-2 mt-1 rounded-lg flex items-center"
+                        className="border bg-white border-black w-[145.02px] px-[8px] py-[6px] text-black font-medium md:ml-2 mt-1 rounded-lg flex items-center"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="w-4 h-4 mr-1"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13"
-                          />
-                        </svg>
                         Attach File
                       </label>
-                      <input type="file" id="nid" className="hidden" />
+                      <input
+                        type="file"
+                        id="nid"
+                        className="hidden"
+                        name="nidFile"
+                        {...register("nidFile")}
+                      />
                     </div>
                   </div>
-                  <div className="lg:col-span-6 col-span-12">
+                  {/* linkedInProfile */}
+                  {/* <div className="lg:col-span-6 col-span-12">
                     <label className="text-[16.27px] font-medium">
-                      Linkdin Profile
+                      LinkdIn Profile
                     </label>
                     <input
                       type="text"
-                      name="nid"
                       className="border mt-2 border-black w-full rounded-md px-3 font-medium py-1"
-                      placeholder="Linkdin Profile"
+                      placeholder="LinkdIn Profile Link"
+                      {...register("linkedInProfile")}
                     />
-                  </div>
-
+                  </div> */}
+                  {/* tin */}
                   <div className="lg:col-span-6 col-span-12">
                     <label className="text-[16.27px] font-medium">TIN</label>
                     <div className="md:flex lg:flex block items-center justify-between mt-2">
                       <input
                         type="text"
-                        name="tin"
                         className="border  border-black w-full rounded-md px-3 font-medium py-1"
-                        placeholder="TIn"
+                        placeholder="TIN"
+                        name="tin"
+                        {...register("tin")}
                       />
                       <label
-                        htmlFor="nid"
-                        className="border border-black w-[145.02px] px-[8px] py-[6px] text-black font-medium md:ml-2 mt-1 rounded-lg flex items-center"
+                        htmlFor="tin"
+                        className="border bg-white border-black w-[145.02px] px-[8px] py-[6px] text-black font-medium md:ml-2 mt-1 rounded-lg flex items-center"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="w-4 h-4 mr-1"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13"
-                          />
-                        </svg>
                         Attach File
                       </label>
-                      <input type="file" id="nid" className="hidden" />
+                      <input
+                        type="file"
+                        id="tin"
+                        name="tinFile"
+                        className="hidden"
+                        {...register("tinFile")}
+                      />
                     </div>
                   </div>
-                  <div className="lg:col-span-6 col-span-12">
+                  {/* githubProfile */}
+                  {/* <div className="lg:col-span-6 col-span-12">
                     <label className="text-[16.27px] font-medium">
                       Github Profile
                     </label>
                     <input
                       type="text"
-                      name="nid"
                       className="border mt-2 border-black w-full rounded-md px-3 font-medium py-1"
                       placeholder="Github Profile"
+                      {...register("githubProfile")}
                     />
-                  </div>
+                  </div> */}
+                  {/* bin */}
                   <div className="lg:col-span-6 col-span-12">
                     <label className="text-[16.27px] font-medium">BIN</label>
                     <div className="md:flex lg:flex block items-center justify-between mt-2">
                       <input
                         type="text"
-                        name="bin"
                         className="border  border-black w-full rounded-md px-3 font-medium py-1"
                         placeholder="BIN"
+                        name="bin"
+                        {...register("bin")}
                       />
                       <label
-                        htmlFor="nid"
-                        className="border border-black w-[145.02px] px-[8px] py-[6px] text-black font-medium md:ml-2 mt-1 rounded-lg flex items-center"
+                        htmlFor="bin"
+                        className="border bg-white border-black w-[145.02px] px-[8px] py-[6px] text-black font-medium md:ml-2 mt-1 rounded-lg flex items-center"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="w-4 h-4 mr-1"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13"
-                          />
-                        </svg>
                         Attach File
                       </label>
-                      <input type="file" id="nid" className="hidden" />
+                      <input
+                        type="file"
+                        id="bin"
+                        className="hidden"
+                        name="binFile"
+                        {...register("binFile")}
+                      />
                     </div>
                   </div>
 
@@ -271,9 +469,11 @@ const index = () => {
                     <button className="bg-[#465EED] py-[10px] px-[50px] rounded-lg text-[16px] text-white">
                       EDIT
                     </button>
-                    <button className="bg-[#47C363] ml-10 py-[10px] px-[50px] rounded-lg text-[16px] text-white">
-                      SAVE
-                    </button>
+                    <input
+                      className="bg-[#47C363] ml-10 py-[10px] px-[50px] rounded-lg text-[16px] text-white"
+                      type="submit"
+                      value="SAVE"
+                    />
                   </div>
                 </form>
               </section>
@@ -284,5 +484,36 @@ const index = () => {
     </>
   );
 };
+
+// export async function getServerSideProps(context) {
+//   const { email } = context.params;
+//   console.log("getServerSideProps email", email);
+
+//   // Check if the email parameter in the URL is a valid email address
+//   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+//   if (!emailRegex.test(email)) {
+//     return {
+//       notFound: true,
+//     };
+//   }
+
+//   // Fetch the user's data from your database or API based on the dynamic email
+//   // Here, you should replace this with your own function to fetch user data
+//   const user = await fetchUserDataByEmail(email);
+
+//   // If the user data is not found, return a 404 response
+//   if (!user) {
+//     return {
+//       notFound: true,
+//     };
+//   }
+
+//   // If the user data is found, return the user data as props to the Profile component
+//   return {
+//     props: {
+//       user,
+//     },
+//   };
+// }
 
 export default index;
