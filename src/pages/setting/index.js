@@ -40,13 +40,19 @@ const index = () => {
               <Link href={"/users/profile/abc"} className="text-3xl">Profile</Link>
             </div>
             <div className="p-6 flex mb-2">
-              <Link href={"/users"} className="text-3xl">Users</Link>
+              <Link href={"/users"} className="text-3xl">Manage Users</Link>
+            </div>
+            <div className="p-6 flex mb-2">
+              <Link href={"/users/manage"} className="text-3xl">Manage Users Roles</Link>
             </div>
             <div className="p-6 flex mb-2">
               <Link href={"/users/add-account"} className="text-3xl">Add Account Requests</Link>
             </div>
             <div className="p-6 flex mb-2">
               <Link href={"/users/limit-update"} className="text-3xl">Limit Update</Link>
+            </div>
+            <div className="p-6 flex mb-2">
+              <Link href={"/transactions"} className="text-3xl">transactions</Link>
             </div>
 
           </div>

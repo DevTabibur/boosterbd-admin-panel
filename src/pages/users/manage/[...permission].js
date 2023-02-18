@@ -1,9 +1,20 @@
 import Sidebar from "@/Components/Sidebar/Sidebar";
 import Topbar from "@/Components/Topbar";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
-const index = () => {
+const index = (props) => {
+  const router = useRouter();
+  const { permission } = router.query;
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckboxChange = (event) => {
+    setIsChecked(event.target.checked);
+  };
+
+  console.log('isChecked', isChecked)
+
   const i = [
     3, 34, 34, 434, 34, 34, 343, 434, 34, 34, 34, 343, 434, 343, 43, 2, 2, 2, 2,
     2, 3, 4, 5, 6, 6, 1, 23, 3, 4343, 343, 43, 6, 6, 1, 23, 3, 4343, 343,
@@ -35,7 +46,7 @@ const index = () => {
             <Topbar pageName={"Manage Roles"} show={show} setShow={setShow} />
             <section className="main-right lg:ml-[38px] ">
               <h1 className="md:text-[37px] text-[18px] text-center md:text-start text-[#1A1A1A] font-semibold py-3 px-2">
-                Edit Role Permissions : Modarator
+                Edit Role Permissions : Moderator
               </h1>
 
               <form
@@ -43,7 +54,14 @@ const index = () => {
                 className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-8 px-6"
               >
                 {i.map((id, index) => {
-                  return <Card key={index} data={index} />;
+                  return (
+                    <Card
+                      key={index}
+                      data={index}
+                      handleCheckboxChange={handleCheckboxChange}
+                      isChecked={isChecked}
+                    />
+                  );
                 })}
               </form>
             </section>
@@ -56,12 +74,16 @@ const index = () => {
 
 export default index;
 
-const Card = ({ data }) => {
+const Card = ({ isChecked, handleCheckboxChange }) => {
   return (
     <div className="flex role-card items-center justify-between p-4">
-      <h1 className="text-[15px] font-medium">Dashboard Info {data}</h1>
+      <h1 className="text-[15px] font-medium">Dashboard Info</h1>
       <label className="switch">
-        <input type="checkbox" />
+        <input
+          type="checkbox"
+          checked={isChecked}
+          onChange={handleCheckboxChange}
+        />
         <span className="slider round" />
       </label>
     </div>
